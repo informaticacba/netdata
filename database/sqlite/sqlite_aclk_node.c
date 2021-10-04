@@ -204,6 +204,8 @@ void aclk_update_retention(struct aclk_database_worker_config *wc, struct aclk_d
     for (int i = 0; i < rotate_data.interval_duration_count; ++i) {
         debug(D_ACLK_SYNC,"%d --> Update %s for %u  Retention = %u", i, wc->host_guid,
              rotate_data.interval_durations[i].update_every, rotate_data.interval_durations[i].retention);
+        info("DEBUG: %d --> Update %s for %u  Retention = %u", i, wc->host_guid,
+              rotate_data.interval_durations[i].update_every, rotate_data.interval_durations[i].retention);
     };
     aclk_retention_updated(&rotate_data);
     freez(rotate_data.node_id);

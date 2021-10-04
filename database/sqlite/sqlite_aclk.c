@@ -352,6 +352,8 @@ void aclk_database_worker(void *arg)
             cmd = aclk_database_deq_cmd(wc);
             opcode = cmd.opcode;
             ++cmd_batch_size;
+            snprintfz(threadname, NETDATA_THREAD_NAME_MAX, "AS%d_%s", opcode, wc->host_guid);
+            uv_thread_set_name_np(wc->thread, threadname);
             switch (opcode) {
                 case ACLK_DATABASE_NOOP:
                     /* the command queue was empty, do nothing */
@@ -416,6 +418,7 @@ void aclk_database_worker(void *arg)
 // NODE OPERATIONS
                 case ACLK_DATABASE_NODE_INFO:
                     debug(D_ACLK_SYNC,"Sending node info for %s", wc->uuid_str);
+                    info("DEBUG: Sending node info for %s", wc->uuid_str);
                     sql_build_node_info(wc, cmd);
                     break;
                 case ACLK_DATABASE_UPD_RETENTION:

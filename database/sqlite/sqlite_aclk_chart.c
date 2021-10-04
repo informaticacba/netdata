@@ -324,6 +324,8 @@ void aclk_send_chart_event(struct aclk_database_worker_config *wc, struct aclk_d
             aclk_chart_inst_and_dim_update(payload_list, payload_list_size, is_dim, position_list, wc->batch_id);
             wc->chart_sequence_id = last_sequence;
             wc->chart_timestamp = last_timestamp;
+            info("DEBUG: Loop=%d CHARTS/DIMENSIONS for %s SEQ %"PRIu64" - %"PRIu64" BATCH=%"PRIu64, loop, wc->host_guid,
+                 first_sequence, last_sequence, wc->batch_id);
         }
         --loop;
     }
@@ -588,7 +590,6 @@ int sql_queue_chart_to_aclk(RRDSET *st)
     if (!aclk_use_new_cloud_arch)
 #endif
     {
-        rrdset_flag_clear(st, RRDSET_FLAG_ACLK);
         aclk_update_chart(st->rrdhost, st->id, 1);
         return 0;
     }
