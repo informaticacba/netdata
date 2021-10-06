@@ -149,8 +149,10 @@ void aclk_del_collector(RRDHOST *host, const char *plugin_name, const char *modu
 void aclk_host_state_update(RRDHOST *host, int connect)
 {
 #ifdef ACLK_NG
-    if (aclk_ng)
+    if (aclk_ng) {
+        info("DEBUG: Sending aclk_host_state_update (%s)%s = %d", host->hostname, host->machine_guid, connect);
         return ng_aclk_host_state_update(host, connect);
+    }
 #endif
 #ifdef ACLK_LEGACY
     if (!aclk_ng)
