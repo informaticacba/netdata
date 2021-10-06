@@ -269,6 +269,8 @@ void aclk_send_chart_event(struct aclk_database_worker_config *wc, struct aclk_d
 
     int loop = cmd.param1;
 
+    uint64_t start_sequence_id = wc->chart_sequence_id;
+
     while (loop > 0) {
         uint64_t previous_sequence_id = wc->chart_sequence_id;
         int count = 0;
@@ -328,6 +330,14 @@ void aclk_send_chart_event(struct aclk_database_worker_config *wc, struct aclk_d
                  first_sequence, last_sequence, wc->batch_id);
         }
         --loop;
+    }
+
+    if (start_sequence_id != wc->chart_sequence_id) {
+        time_t now = now_realtime_sec();
+        if (wc->rotation_after > now && wc->rotation_after < now + ACLK_DATABASE_ROTATION_DELAY) {
+            info("DEBUG: Delaying rotation message for %s (sync in progress)", wc->host_guid);
+            wc->rotation_after = now + ACLK_DATABASE_ROTATION_DELAY;
+        }
     }
 
     for (int i = 0; i <= limit; ++i)
