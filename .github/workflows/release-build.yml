@@ -52,7 +52,7 @@ jobs:
         run: |
           .github/scripts/run_install_with_dist_file.sh "${DISTFILE}"
       - name: Store
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: dist-tarball
           path: artifacts/*.tar.gz
@@ -96,7 +96,7 @@ jobs:
       - name: Build
         run: .github/scripts/build-static.sh ${{ matrix.arch }}
       - name: Store
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: static-archive
           path: artifacts/*.gz.run
